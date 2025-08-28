@@ -14,6 +14,10 @@ HOT3D-Clips are distributed via a [folder on Hugging Face](https://huggingface.c
 
 - `object_models` - 3D object models in GLB format with PBR materials.
 - `object_models_eval` - Simplified 3D object models in GLB format without PBR materials (used for [BOP evaluation](https://bop.felk.cvut.cz/challenges/bop-challenge-2024/)).
+- `object_ref_aria_dynamic` - Dynamic object onboarding sequences from Aria. GT object pose is available only in the first frame.
+- `object_ref_aria_dynamic_vis` - Visualizations of dynamic onboarding sequences from Aria.
+- `object_ref_aria_static` - Static object onboarding sequences from Aria. GT object poses are available in all frames.
+- `object_ref_aria_static_vis` - Visualizations of static onboarding sequences from Aria.
 - `object_ref_quest3_dynamic` - Dynamic object onboarding sequences from Quest 3. GT object pose is available only in the first frame.
 - `object_ref_quest3_dynamic_vis` - Visualizations of dynamic onboarding sequences from Quest 3.
 - `object_ref_quest3_static` - Static object onboarding sequences from Quest 3. GT object poses are available in all frames.
@@ -68,12 +72,12 @@ Files `<FRAME-ID>.cameras.json` provide camera parameters for each image stream:
   - `projection_model_type`: Projection model type (e.g. `CameraModelType.FISHEYE624`).
   - `projection_params`: Projection parameters.
   - `T_device_from_camera`:
-    - `translation_xyz`: Translation from device to the camera.
-    - `quaternion_wxyz`: Rotation from device to the camera.
+    - `translation_xyz`: Translation from camera to device.
+    - `quaternion_wxyz`: Rotation from camera to device.
   - `max_solid_angle`: Max solid angle of the camera.
 - `T_world_from_camera`:
-  - `translation_xyz`: Translation from world to the camera.
-  - `quaternion_wxyz`: Rotation from world to the camera.
+  - `translation_xyz`: Translation from camera to world.
+  - `quaternion_wxyz`: Rotation from camera to world.
 
 Files `<FRAME-ID>.objects.json` provide for each annotated object the following:
 
