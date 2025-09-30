@@ -131,7 +131,8 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
         scene_gt_info_data[stream_name] = {}
 
     # loop over all frames
-    for frame_id in range(clip_util.get_number_of_frames(tar)):
+    nump_frames = clip_util.get_number_of_frames(tar)
+    for frame_id in range(nump_frames):
         frame_key = f"{frame_id:06d}"
 
         # Load camera parameters.
