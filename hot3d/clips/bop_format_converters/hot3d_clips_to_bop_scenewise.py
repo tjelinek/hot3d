@@ -249,9 +249,16 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                                   "The process will exit.")
                             exit()
                         else:
-                            mask = custom_rle_to_mask(rle_dict['height'], rle_dict['width'], rle_dict['rle'])
-                            mask = Image.fromarray(mask * 255)
-                            mask = mask.convert("L")
+                    # read amodal masks
+                    rle_dict = obj_data["masks_amodal"][stream_id] if "masks_amodal" in obj_data else {'rle': []}
+                    if not rle_dict["rle"]:
+                        # exit()
+                    else:
+                        mask = custom_rle_to_mask(
+                            rle_dict["height"], rle_dict["width"], rle_dict["rle"]
+                        )
+                        mask = Image.fromarray(mask * 255)
+                        mask = mask.convert("L")
 
                         # read modal mask
                         rle_dict = obj_data['masks_modal'][stream_id]
