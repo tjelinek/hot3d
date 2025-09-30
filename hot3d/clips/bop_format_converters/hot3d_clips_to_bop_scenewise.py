@@ -70,7 +70,7 @@ def main():
     split_clips = sorted([p for p in os.listdir(clips_input_dir) if p.endswith(".tar")])
 
     # create output directory
-    os.makedirs(scenes_output_dir, exist_ok=False)
+    os.makedirs(scenes_output_dir, exist_ok=True)
 
     # Progress bar setup
     with tqdm(total=len(split_clips), desc="Processing clips") as pbar:
