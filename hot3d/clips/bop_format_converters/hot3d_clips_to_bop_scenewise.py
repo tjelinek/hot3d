@@ -74,11 +74,9 @@ def main():
 
     # Progress bar setup
     with tqdm(total=len(split_clips), desc="Processing clips") as pbar:
-        # Use a Pool of 8 processes
-        with multiprocessing.Pool(processes=args.num_threads) as pool:
-            # Use imap_unordered to get results as soon as they're ready
-            for _ in pool.imap_unordered(worker, ((clip, clips_input_dir, scenes_output_dir, args) for clip in split_clips)):
-                pbar.update(1)
+        for clip in split_clips:
+            worker((clip, clips_input_dir, scenes_output_dir, args))
+            pbar.update(1)
 
 
 def worker(args):
