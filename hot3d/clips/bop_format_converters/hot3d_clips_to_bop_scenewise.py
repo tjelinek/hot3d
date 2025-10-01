@@ -143,12 +143,26 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
 
         # read calibration json as it is
         camera_json_file_name = f"{frame_id:06d}.cameras.json"
-        camera_json_file = tar.extractfile(camera_json_file_name)
+
+        if camera_json_file_name in tar.getnames():
+            camera_json_file = tar.extractfile(camera_json_file_name)
+        else:
+            top_level = Path(clip).stem
+            camera_json_file_name = f"{top_level}/{camera_json_file_name}"
+            camera_json_file = tar.extractfile(camera_json_file_name)
+
         frame_camera_data = json.load(camera_json_file)
 
-        # read FRAME_ID.info.json
+        # Read frame info JSON
         frame_info_file_name = f"{frame_id:06d}.info.json"
-        frame_info_file = tar.extractfile(frame_info_file_name)
+
+        if frame_info_file_name in tar.getnames():
+            frame_info_file = tar.extractfile(frame_info_file_name)
+        else:
+            top_level = Path(clip).stem
+            frame_info_file_name = f"{top_level}/{frame_info_file_name}"
+            frame_info_file = tar.extractfile(frame_info_file_name)
+
         frame_info_data = json.load(frame_info_file)
 
         # loop over all camera streams
