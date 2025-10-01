@@ -271,11 +271,12 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                             mask_visib = Image.fromarray(mask_visib * 255)
                             mask_visib = mask_visib.convert("L")
 
-                    px_count_all = cv2.countNonZero(np.array(mask))
-                    px_count_visib = cv2.countNonZero(np.array(mask_visib))
+                    px_count_all = cv2.countNonZero(np.array(mask)) if mask is not None else 0
+                    px_count_visib = cv2.countNonZero(np.array(mask_visib)) if mask_visib is not None else 0
                     # visibile fraction
                     visibilities_modeled = obj_data["visibilities_modeled"][stream_id]
-                    visibilities_predicted = obj_data["visibilities_predicted"][stream_id]
+                    visibilities_predicted = obj_data["visibilities_predicted"][stream_id] \
+                        if 'visibilities_predicted' in obj_data else 0
                     visib_fract = min(visibilities_modeled, visibilities_predicted)
 
                     bbox_obj = obj_data["boxes_amodal"][stream_id]
@@ -312,14 +313,16 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                     frame_key + "_" + anno_id + ".png",
                 )
                 # save mask
-                mask.save(mask_path)
+                if mask is not None:
+                    mask.save(mask_path)
                 # save mask_visib FRAME-ID_ANNO-ID.png
                 mask_visib_path = os.path.join(
                     clip_stream_paths[f"mask_visib_{stream_name}"],
                     frame_key + "_" + anno_id + ".png",
                 )
                 # save mask_visib
-                mask_visib.save(mask_visib_path)
+                if mask_visib is not None:
+                    mask_visib.save(mask_visib_path)
 
                 frame_scene_gt_data.append(object_frame_scene_gt_anno)
                 frame_scene_gt_info_data.append(object_frame_scene_gt_info_anno)
