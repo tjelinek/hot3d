@@ -22,6 +22,7 @@ NOTE: the BOP format was updated from its classical format to a new format.
 import os
 import argparse
 import json
+from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image
@@ -86,7 +87,7 @@ def worker(args):
 
 def process_clip(clip, clips_input_dir, scenes_output_dir, args):
     # get clip id
-    clip_name = clip.split(".")[0].split("-")[1]
+    clip_name = clip.split(".")[0].split("_")[1]
 
     # extract clip
     tar = tarfile.open(os.path.join(clips_input_dir, clip), "r")
@@ -254,20 +255,10 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                         "cam_t_m2c": (T_camera_from_model[:3, 3] * 1000).tolist(),
                     }
 
-                        # read amodal masks
-                        rle_dict = obj_data['masks_amodal'][stream_id]
-                        if not rle_dict['rle']:
-                            # if 'rle' is an empty list, continue to the next object
-                            print("RLE mask is empty!",
-                                  "For scene_id:{}, frame_id: {}, obj_id: {}.".format(clip_name, frame_id, obj_key),
-                                  "This case shouldn't happen. Maybe that is an edge case That is not covered here.",
-                                  "The process will exit.")
-                            exit()
-                        else:
                     # read amodal masks
                     rle_dict = obj_data["masks_amodal"][stream_id] if "masks_amodal" in obj_data else {'rle': []}
                     if not rle_dict["rle"]:
-                        # exit()
+                        mask = None
                     else:
                         mask = custom_rle_to_mask(
                             rle_dict["height"], rle_dict["width"], rle_dict["rle"]
@@ -275,15 +266,17 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                         mask = Image.fromarray(mask * 255)
                         mask = mask.convert("L")
 
-                        # read modal mask
-                        rle_dict = obj_data['masks_modal'][stream_id]
-                        # if 'rle' is an empty list, make an empty mask
-                        if not rle_dict['rle']:
-                            mask_visib = Image.new("L", (rle_dict['width'], rle_dict['height']), 0)
-                        else:
-                            mask_visib = custom_rle_to_mask(rle_dict['height'], rle_dict['width'], rle_dict['rle'])
-                            mask_visib = Image.fromarray(mask_visib * 255)
-                            mask_visib = mask_visib.convert("L")
+                    # read modal mask
+                    rle_dict = obj_data["masks_modal"][stream_id] if "masks_model" in obj_data else {"rle": {}}
+                    # if 'rle' is an empty list, make an empty mask
+                    if (mask_visib := clip_util.load_segmentation(tar, frame_key, stream_id)) is not None:
+                        pass
+                    elif not rle_dict["rle"]:
+                        mask_visib = None
+                    else:
+                        mask_visib = custom_rle_to_mask(rle_dict["height"], rle_dict["width"], rle_dict["rle"])
+                        mask_visib = Image.fromarray(mask_visib * 255)
+                        mask_visib = mask_visib.convert("L")
 
                     px_count_all = cv2.countNonZero(np.array(mask)) if mask is not None else 0
                     px_count_visib = cv2.countNonZero(np.array(mask_visib)) if mask_visib is not None else 0
