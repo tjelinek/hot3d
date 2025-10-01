@@ -323,12 +323,13 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
                 if mask is not None:
                     mask.save(mask_path)
                 # save mask_visib FRAME-ID_ANNO-ID.png
-                mask_visib_path = os.path.join(
-                    clip_stream_paths[f"mask_visib_{stream_name}"],
-                    frame_key + "_" + anno_id + ".png",
-                )
+                mask_visib_path = Path(clip_stream_paths[f"mask_visib_{stream_name}"]) / f"{frame_key}_{anno_id}.png"
+                mask_visib_path.parent.mkdir(parents=True, exist_ok=True)
+
                 # save mask_visib
                 if mask_visib is not None:
+                    if type(mask_visib) is not Image.Image:
+                        mask_visib = Image.fromarray(mask_visib, mode='L')
                     mask_visib.save(mask_visib_path)
 
                 frame_scene_gt_data.append(object_frame_scene_gt_anno)
