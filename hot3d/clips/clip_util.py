@@ -47,7 +47,7 @@ def get_number_of_frames(tar: Any) -> int:
     max_frame_id = -1
     for x in tar.getnames():
         if x.endswith(".info.json"):
-            frame_id = int(x.split(".info.json")[0])
+            frame_id = int(Path(x).name.split('.')[0])
             if frame_id > max_frame_id:
                 max_frame_id = frame_id
     return max_frame_id + 1
