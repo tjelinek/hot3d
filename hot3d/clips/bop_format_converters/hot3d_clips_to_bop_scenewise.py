@@ -76,6 +76,22 @@ def main():
             worker((clip, clips_input_dir, scenes_output_dir, args))
             pbar.update(1)
 
+    print("\nCleaning up empty directories...")
+    cleanup_empty_scenes(scenes_output_dir)
+
+
+def cleanup_empty_scenes(scenes_output_dir):
+    """Remove empty scene directories after processing."""
+    scenes_path = Path(scenes_output_dir)
+
+    for scene_dir in scenes_path.iterdir():
+        if scene_dir.is_dir():
+            for modality_dir in scene_dir.iterdir():
+                # Check if directory is empty (no files or subdirectories with content)
+                if modality_dir.is_dir() and not any(modality_dir.iterdir()):
+                    print(f"Removing empty directory: {modality_dir}")
+                    modality_dir.rmdir()
+
 
 def worker(args):
     clip, clips_input_dir, scenes_output_dir, args = args
