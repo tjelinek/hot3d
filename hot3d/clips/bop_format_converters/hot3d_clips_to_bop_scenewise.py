@@ -87,7 +87,8 @@ def worker(args):
 
 def process_clip(clip, clips_input_dir, scenes_output_dir, args):
     # get clip id
-    clip_name = clip.split(".")[0].split("_")[1]
+    clip_name = clip.split(".")[0]
+    clip_name = clip_name.split("_")[1] if '_' in clip_name else clip_name.split("-")[1]
 
     # extract clip
     tar = tarfile.open(os.path.join(clips_input_dir, clip), "r")
