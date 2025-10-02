@@ -205,7 +205,7 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
             frame_scene_gt_data = []
             frame_scene_gt_info_data = []
             # loop with enumerate over all objects in the frame
-            for anno_id, obj_key in enumerate(frame_objects):
+            for anno_id, obj_key in enumerate(frame_objects if frame_objects is not None else []):
                 obj_data = frame_objects[obj_key][0]
 
                 # set objects that are not in the current frame scope to -1 (they probably are visible in other frames)
