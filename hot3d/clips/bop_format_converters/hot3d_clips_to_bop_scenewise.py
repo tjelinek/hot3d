@@ -183,7 +183,7 @@ def process_clip(clip, clips_input_dir, scenes_output_dir, args):
             # filling scene_camera.json
 
             # get T_world_from_camera
-            T_world_from_camera = frame_camera[stream_id].T_world_from_eye
+            T_world_from_camera = frame_camera[0][stream_id].T_world_from_eye
 
             T_world_to_camera = np.linalg.inv(T_world_from_camera)
 
