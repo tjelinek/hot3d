@@ -19,22 +19,19 @@ NOTE: the BOP format was updated from its classical format to a new format.
       The new format can have multiple modalities (rgb, gray1, gray2) and no depth.
 """
 
-import os
 import argparse
 import json
+import os
+import sys
+import tarfile
 from pathlib import Path
+
 import cv2
 import numpy as np
 from PIL import Image
-import tarfile
-from typing import Any, Dict, List, Optional
-import trimesh
-from tqdm import tqdm
-from scipy.spatial.transform import Rotation as R
-import multiprocessing
 from bop_toolkit_lib import misc
+from tqdm import tqdm
 
-import sys
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, parent_dir)
 import clip_util
