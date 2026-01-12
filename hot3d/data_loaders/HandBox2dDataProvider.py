@@ -23,7 +23,6 @@ from projectaria_tools.core.stream_id import StreamId  # @manual
 
 from .AlignedBox2d import AlignedBox2d
 from .constants import HAND_BOX2D_DATA_CSV_COLUMNS
-
 from .io_utils import float_or_none, is_float
 from .loader_poses_utils import check_csv_columns
 from .pose_utils import lookup_timestamp

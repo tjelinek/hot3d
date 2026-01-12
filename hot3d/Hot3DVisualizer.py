@@ -15,10 +15,8 @@
 from typing import Dict, List, Optional
 
 import matplotlib.pyplot as plt
-
 import numpy as np
 import rerun as rr  # @manual
-
 from data_loaders.hand_common import LANDMARK_CONNECTIVITY
 from data_loaders.headsets import Headset
 from data_loaders.loader_hand_poses import HandType
@@ -38,12 +36,10 @@ from data_loaders.ObjectBox2dDataProvider import (  # @manual
     ObjectBox2dCollectionWithDt,
     ObjectBox2dProvider,
 )
-
 from data_loaders.ObjectPose3dProvider import (  # @manual
     ObjectPose3dCollectionWithDt,
     ObjectPose3dProvider,
 )
-
 from projectaria_tools.core.calibration import (
     CameraCalibration,
     DeviceCalibration,
@@ -51,12 +47,10 @@ from projectaria_tools.core.calibration import (
     LINEAR,
 )
 from projectaria_tools.core.mps import get_eyegaze_point_at_depth  # @manual
-
 from projectaria_tools.core.mps.utils import (  # @manual
     filter_points_from_confidence,
     filter_points_from_count,
 )
-
 from projectaria_tools.core.sensor_data import TimeDomain, TimeQueryOptions  # @manual
 from projectaria_tools.core.sophus import SE3  # @manual
 from projectaria_tools.utils.rerun_helpers import (  # @manual

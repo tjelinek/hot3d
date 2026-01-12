@@ -18,7 +18,6 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 import torch
-
 from data_loaders.loader_hand_poses import (
     Handedness,
     HandPose,

@@ -16,28 +16,22 @@ import os
 from typing import Any, Dict, Optional
 
 import data_loaders.HandBox2dDataProvider as HandBox2dDataProvider
-
 import data_loaders.ObjectBox2dDataProvider as ObjectBox2dDataProvider
-
 from data_loaders.AriaDataProvider import AriaDataProvider
-
 from data_loaders.HeadsetPose3dProvider import (
     HeadsetPose3dProvider,
     load_headset_pose_provider_from_csv,
 )
-
 from data_loaders.headsets import Headset
 from data_loaders.io_utils import load_json
 from data_loaders.loader_object_library import ObjectLibrary
 from data_loaders.mano_layer import MANOHandModel
 from data_loaders.ManoHandDataProvider import MANOHandDataProvider
-
 from data_loaders.ObjectPose3dProvider import (
     load_pose_provider_from_csv,
     ObjectPose3dProvider,
 )
 from data_loaders.PathProvider import Hot3dDataPathProvider
-
 from data_loaders.QuestDataProvider import QuestDataProvider
 from data_loaders.UmeTrackHandDataProvider import UmeTrackHandDataProvider
 
