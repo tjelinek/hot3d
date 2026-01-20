@@ -19,7 +19,6 @@ from pathlib import Path
 
 from data_loaders.HandDataProviderBase import HandDataProviderBase
 from data_loaders.loader_hand_poses import Handedness
-from data_loaders.mano_layer import MANOHandModel
 from data_loaders.ManoHandDataProvider import MANOHandDataProvider
 from data_loaders.UmeTrackHandDataProvider import UmeTrackHandDataProvider
 from projectaria_tools.core.sensor_data import TimeDomain, TimeQueryOptions
