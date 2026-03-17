@@ -18,11 +18,8 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 import torch
-
 from data_loaders.HandDataProviderBase import HandDataProviderBase
-
 from data_loaders.loader_hand_poses import Handedness, HandPose
-
 from data_loaders.umetrack_layer import get_skinning_weights, skin_points
 
 
@@ -172,9 +169,9 @@ def skin_vertices(
     wrist_transforms: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
     assert hand_model.mesh_vertices is not None, "mesh vertices should not be none"
-    assert (
-        hand_model.dense_bone_weights is not None
-    ), "dense bone weights should not be none"
+    assert hand_model.dense_bone_weights is not None, (
+        "dense bone weights should not be none"
+    )
     vertices = skin_points(
         hand_model.joint_rest_positions.double(),
         hand_model.joint_rotation_axes.double(),

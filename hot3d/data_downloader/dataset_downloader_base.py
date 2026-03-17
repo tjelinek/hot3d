@@ -22,12 +22,10 @@ from typing import List, Optional, Tuple
 from zipfile import is_zipfile, ZipFile
 
 import requests
-
 from dataset_download_status_manager import (
     DatasetDownloadStatusManager,
     DOWNLOAD_STATUS_FILE,
 )
-
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm

@@ -15,7 +15,6 @@
 import argparse
 
 from dataset_downloader_base import DatasetDownloaderBase
-
 from utils import load_data_groups_from_cdn, load_sequences_list_from_cdn
 
 

@@ -14,7 +14,6 @@
 
 import csv
 from dataclasses import dataclass
-
 from typing import Any, Dict, List, Optional, Set
 
 import numpy as np

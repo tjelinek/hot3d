@@ -54,7 +54,6 @@ from projectaria_tools.core.calibration import (
 from projectaria_tools.core.sensor_data import TimeDomain, TimeQueryOptions
 from projectaria_tools.core.sophus import SE3
 from projectaria_tools.core.stream_id import StreamId
-
 from tqdm import tqdm
 
 # Matrix transform to change Aria camera pose to PyRender coordinate system
