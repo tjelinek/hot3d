@@ -15,6 +15,7 @@
 
 import json
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
 
 import cv2
 import imageio
@@ -47,14 +48,14 @@ def get_number_of_frames(tar: Any) -> int:
     max_frame_id = -1
     for x in tar.getnames():
         if x.endswith(".info.json"):
-            frame_id = int(x.split(".info.json")[0])
+            frame_id = int(Path(x).name.split('.')[0])
             if frame_id > max_frame_id:
                 max_frame_id = frame_id
     return max_frame_id + 1
 
 
 def load_image(
-    tar: Any, frame_key: str, stream_key: str, dtype: Any = np.uint8
+        tar: Any, frame_key: str, stream_key: str, dtype: Any = np.uint8
 ) -> np.ndarray:
     """Loads an image from the specified frame and stream of a clip.
 
@@ -66,8 +67,48 @@ def load_image(
     Returns:
         Numpy array with the loaded image.
     """
+    filename = f"{frame_key}.image_{stream_key}.jpg"
 
-    file = tar.extractfile(f"{frame_key}.image_{stream_key}.jpg")
+    if filename in tar.getnames():
+        file = tar.extractfile(filename)
+    else:
+        top_level = tar.getnames()[0].split("/")[0]
+        filename_with_prefix = f"{top_level}/{filename}"
+        file = tar.extractfile(filename_with_prefix)
+
+    return imageio.imread(file).astype(dtype)
+
+
+def load_segmentation(
+    tar: Any, frame_key: str, stream_key: str, dtype: Any = np.uint8
+) -> Optional[np.ndarray]:
+    """Loads an image from the specified frame and stream of a clip.
+
+    Args:
+        tar: File handler of an open tar file with clip data.
+        frame_key: Key of the frame from which to load the image.
+        stream_key: Key of the stream from which to load the image.
+        dtype: Desired type of the loaded image.
+    Returns:
+        Numpy array with the loaded image.
+    """
+    filename = f"{frame_key}.mask_{stream_key}.png"
+
+    if filename in tar.getnames():
+        file = tar.extractfile(filename)
+    else:
+        # Try with top-level directory prefix
+        top_level = tar.getnames()[0].split("/")[0]
+        filename_with_prefix = f"{top_level}/{filename}"
+
+        if filename_with_prefix in tar.getnames():
+            file = tar.extractfile(filename_with_prefix)
+        else:
+            return None
+
+    if file is None:
+        return None
+
     return imageio.imread(file).astype(dtype)
 
 
@@ -85,8 +126,8 @@ def load_info(tar: Any, frame_key: str) -> Dict[str, Any]:
 
 
 def load_cameras(
-    tar: Any,
-    frame_key: str,
+        tar: Any,
+        frame_key: str,
 ) -> Tuple[Dict[str, camera.CameraModel], Dict[str, np.ndarray]]:
     """Loads cameras for all image streams in a specified frame of a clip.
 
@@ -96,8 +137,14 @@ def load_cameras(
     Returns:
         A dictionary mapping a stream key to a camera model.
     """
+    camera_file_name = f"{frame_key}.cameras.json"
 
-    cameras_raw = json.load(tar.extractfile(f"{frame_key}.cameras.json"))
+    if camera_file_name in tar.getnames():
+        cameras_raw = json.load(tar.extractfile(camera_file_name))
+    else:
+        top_level = tar.getnames()[0].split("/")[0]
+        camera_file_name = f"{top_level}/{camera_file_name}"
+        cameras_raw = json.load(tar.extractfile(camera_file_name))
 
     cameras = {}
     Ts_device_from_camera = {}
@@ -111,8 +158,8 @@ def load_cameras(
 
 
 def load_object_annotations(
-    tar: Any,
-    frame_key: str,
+        tar: Any,
+        frame_key: str,
 ) -> Optional[Dict[str, Any]]:
     """Loads object annotations for a specified frame of a clip.
 
@@ -124,11 +171,19 @@ def load_object_annotations(
     """
 
     filename = f"{frame_key}.objects.json"
+
     if filename in tar.getnames():
         return json.load(tar.extractfile(filename))
     else:
-        # Annotations are not provided for test clips.
-        return None
+        # Try with top-level directory prefix
+        top_level = tar.getnames()[0].split("/")[0]
+        filename_with_prefix = f"{top_level}/{filename}"
+
+        if filename_with_prefix in tar.getnames():
+            return json.load(tar.extractfile(filename_with_prefix))
+        else:
+            # Annotations are not provided for test clips.
+            return None
 
 
 def load_hand_annotations(

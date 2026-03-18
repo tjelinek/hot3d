@@ -18,11 +18,10 @@ Note: the models_info.json file should be copied from the HOT3D dataset model di
       The data in this native models_info.json file actually contains more data than the standard BOP models_info.json.
 """
 
-import argparse
 import glob
 import os
-
 import trimesh
+import argparse
 
 
 def main():
@@ -43,9 +42,7 @@ def main():
         mesh.vertices *= 1000.0
 
         # save the mesh as a PLY file ascii format
-        mesh_out_path = os.path.join(
-            args.output_bop_dir, os.path.basename(mesh_in_path).replace(".glb", ".ply")
-        )
+        mesh_out_path = os.path.join(args.output_bop_dir, os.path.basename(mesh_in_path).replace(".glb", ".ply"))
         print(f"dst: {mesh_out_path}")
         ply_file = trimesh.exchange.ply.export_ply(mesh, encoding="ascii")
         with open(mesh_out_path, "wb") as f:
@@ -54,19 +51,13 @@ def main():
 
 def load_mesh(path: str) -> trimesh.Trimesh:
     # Load the scene.
-    scene = trimesh.load_mesh(
-        path,
-        process=False,
-        merge_primitives=True,
-        skip_materials=True,
-        maintain_order=True,
-    )
+    scene = trimesh.load_mesh(path, process=False, merge_primitives=True, skip_materials=True, maintain_order=True)
 
     # Represent the scene by a single mesh.
     mesh = scene.dump(concatenate=True)
 
     # Clean the mesh.  # don't use it as it will change indices and normals
-    # mesh.process(validate=True)
+    #mesh.process(validate=True)
 
     return mesh
 
